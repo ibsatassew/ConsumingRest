@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t name/consumingrest .
+
+      - name: Run microservice in a container
+        run: docker run -d --name consumingrest name/consumingrest
+
+      - name: Test microservice endpoint
+        run: |
+          curl -X GET http://localhost:8080/fib
+
